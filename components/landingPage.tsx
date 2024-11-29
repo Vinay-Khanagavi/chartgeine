@@ -10,7 +10,8 @@ import {
     UserButton,
 } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import Image from 'next/image'
+
 
 export function LandingPage() {
     const router = useRouter();
@@ -75,7 +76,7 @@ export function LandingPage() {
                             clicks.
                         </p>
                         <Button
-                            onClick={() => router.push('/home')}
+                            onClick={() => router.push('/generate')}
                             className="mt-8 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md font-medium hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-md text-white"
                         >
                             Get Started
@@ -83,15 +84,22 @@ export function LandingPage() {
                     </div>
                     <Image
                         src="/placeholder.png"
-                        width="500"
-                        height="400"
-                        alt="Chart Genie"
+                        alt="chartgenielogo"
+                        width={500}
+                        height={400}
                         className="mt-16 w-auto h-auto max-w-md md:max-w-lg  xl:max-w-2xl object-contain"
-                    />
+                        />
+                        
                 </main>
                 <footer className="py-4 text-center text-gray-500">
                     <p>
-                        <Image src="/samespace.jpg" alt="SameSpace Logo" className="h-6 w-auto inline-block align-middle mr-1" />
+                    <Image
+                        src="/samespace.jpg"
+                        alt="Landscape picture"
+                        width={800}
+                        height={500}
+                        className="h-6 w-auto inline-block align-middle mr-1"
+                        />
                         Supported by SameSpace
                     </p>
                 </footer>
