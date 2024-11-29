@@ -40,13 +40,13 @@ export function LandingPage() {
                             >
                                 How It Works
                             </Link>
-                            <Link
+                            {/* <Link
                                 href="#pricing"
                                 className="text-base font-medium  hover:underline underline-offset-4"
                                 prefetch={false}
                             >
                                 Pricing
-                            </Link>
+                            </Link> */}
                         </nav>
                         <div className=" hidden md:flex items-center gap-4">
                             <SignedOut>

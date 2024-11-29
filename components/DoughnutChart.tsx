@@ -19,6 +19,8 @@ const DoughnutChart = () => {
         ],
         labels:['Label1','label2','label3']
     }
+
+    
 return <Doughnut 
     data={data} 
     options={{
