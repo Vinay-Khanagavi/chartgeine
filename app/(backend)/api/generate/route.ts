@@ -9,7 +9,7 @@ const groq = new Groq({
 
 export async function POST(request: NextRequest) {
     try {
-        const { prompt } = await request.json();
+        const { prompt, chartType } = await request.json();
 
         if (!prompt) {
             return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
@@ -20,14 +20,15 @@ export async function POST(request: NextRequest) {
             messages: [
                 {
                     role: 'system',
-                    content: 'Generate strict JSON for a bar or pie chart which is asked. ONLY return valid JSON in this exact format.'
+                    content: `Generate strict JSON for a ${chartType} chart which is asked. ONLY return valid JSON in this exact format.`
                 },
                 {
                     role: 'user',
-                    content: `Create chart data for: "${prompt}". 
-JSON FORMAT REQUIRED:
+                    content: `Create ${chartType} chart data for: "${prompt}". 
+JSON FORMAT REQUIRED: 
 {
-  "labels": ["Label1", "Label2", "Label3"], 
+  "type": "${chartType}",
+  "labels": ["Label1", "Label2", "Label3"],
   "datasets": [{
     "label": "Chart Title",
     "data": [10, 20, 30],
@@ -42,18 +43,17 @@ JSON FORMAT REQUIRED:
         const content = response.choices[0]?.message?.content;
         const chartData = JSON.parse(content || '{}');
         return NextResponse.json(chartData);
-
     } catch (error) {
-        return NextResponse.json({ 
-            error: 'Chart generation failed', 
+        return NextResponse.json({
+            error: 'Chart generation failed',
             details: error instanceof Error ? error.message : String(error)
         }, { status: 500 });
     }
 }
 
 export async function GET() {
-    return NextResponse.json({ 
+    return NextResponse.json({
         message: 'POST request with prompt for chart data',
-        usage: '{ "prompt": "description" }'
+        usage: '{ "prompt": "description", "chartType": "bar|pie|line" }'
     }, { status: 200 });
 }

@@ -1,11 +1,14 @@
 "use client"
 import { useState, useRef } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie, Line } from 'react-chartjs-2';
+import Spline, { SplineProps } from '@splinetool/react-spline';
+
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
     BarElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend
@@ -14,16 +17,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, Code } from "lucide-react";
 import {
-    Sheet,
-    SheetContent,
-    SheetTrigger,
-    SheetHeader,
-    SheetFooter,
-    SheetTitle,
-    SheetDescription,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+// Register ChartJS components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    ArcElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 // Define interfaces for chart data
 interface ChartDataset {
@@ -33,29 +54,30 @@ interface ChartDataset {
 }
 
 interface ChartData {
+    type?: string;
     labels: string[];
     datasets: ChartDataset[];
 }
 
-// Register ChartJS components
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-);
+// Define chart type options
+const CHART_TYPES = [
+    { value: 'bar', label: 'Bar Chart' },
+    { value: 'pie', label: 'Pie Chart' },
+] as const;
+
+type ChartType = typeof CHART_TYPES[number]['value'];
 
 const GeneratePage = () => {
     const [input, setInput] = useState('');
     const [chartData, setChartData] = useState<ChartData | null>(null);
+    const [chartType, setChartType] = useState<ChartType>('bar');
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [chartTitle, setChartTitle] = useState("");
     const [chartSubTitle, setChartSubTitle] = useState("");
     const chartRef = useRef<any>(null);
-    
+    const sceneUrl: SplineProps['scene'] = "https://prod.spline.design/OqMCNfqIwCKfmrzT/scene.splinecode";
+
 
     const handleGenerate = async () => {
         setError(null);
@@ -68,10 +90,12 @@ const GeneratePage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt: input })
+                body: JSON.stringify({ 
+                    prompt: input,
+                    chartType: chartType 
+                })
             });
 
-            // Parse the response text first
             const responseText = await response.text();
 
             let data: ChartData;
@@ -93,23 +117,62 @@ const GeneratePage = () => {
 
             setChartData({
                 ...data,
-                datasets: data.datasets.map((dataset: ChartDataset) => ({
-                    ...dataset,
-                    backgroundColor: dataset.backgroundColor ||
-                        'rgba(75, 192, 192, 0.6)'
-                }))
+                type: chartType
             });
         } catch (error: unknown) {
             console.error('Detailed error generating chart:', error);
             setError(
                 error instanceof Error ? error.message :
-                    'An unexpected error occurred while generating the chart'
+                'An unexpected error occurred while generating the chart'
             );
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Render the appropriate chart type
+    const renderChart = () => {
+        if (!chartData) return null;
+
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: !!chartTitle,
+                    text: chartTitle
+                },
+                subtitle: {
+                    display: !!chartSubTitle,
+                    text: chartSubTitle
+                }
+            }
+        };
+
+        const chartProps = {
+            ref: chartRef,
+            data: chartData,
+            options: {
+                ...commonOptions,
+                ...(chartType === 'bar' ? { 
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                } : {})
+            }
+        };
+
+        switch (chartType) {
+            case 'bar':
+                return <Bar {...chartProps} />;
+            case 'pie':
+                return <Line {...chartProps} />;
+            default:
+                return null;
+        }
+    };
     const handleExportPNG = () => {
         if (chartRef.current) {
             const link = document.createElement('a');
@@ -138,22 +201,22 @@ const GeneratePage = () => {
         if (chartData) {
             // Generate a basic embeddable code snippet
             const embedCode = `
-<!-- Embedded Chart -->
-<div style="width: 600px; height: 400px;">
-    <canvas id="embeddedChart"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('embeddedChart').getContext('2d');
-        new Chart(ctx, ${JSON.stringify({
-                type: 'bar',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            })});
-    </script>
-</div>
+                <!-- Embedded Chart -->
+                <div style="width: 600px; height: 400px;">
+                    <canvas id="embeddedChart"></canvas>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        const ctx = document.getElementById('embeddedChart').getContext('2d');
+                        new Chart(ctx, ${JSON.stringify({
+                                type: 'bar',
+                                data: chartData,
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+                                }
+                            })});
+                    </script>
+                </div>
             `.trim();
 
             navigator.clipboard.writeText(embedCode).then(() => {
@@ -171,6 +234,25 @@ const GeneratePage = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
+
+                <div className="flex items-center space-x-4 mb-4">
+                    <Label>Chart Type:</Label>
+                    <Select 
+                        value={chartType} 
+                        onValueChange={(value: ChartType) => setChartType(value)}
+                    >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Select chart type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {CHART_TYPES.map((type) => (
+                                <SelectItem key={type.value} value={type.value}>
+                                    {type.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
                 <Button
                     onClick={handleGenerate}
                     disabled={!input || isLoading}
@@ -184,7 +266,7 @@ const GeneratePage = () => {
                         'Generate Chart'
                     )}
                 </Button>
-
+                
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button className="ml-5" variant={"outline"}>Customize</Button>
@@ -238,6 +320,7 @@ const GeneratePage = () => {
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
+                </div>
             </div>
 
             {error && (
@@ -247,31 +330,12 @@ const GeneratePage = () => {
             )}
             {chartData && (
                 <div className="w-full max-w-4xl h-[400px] mt-5">
-                    <Bar
-                        ref={chartRef}
-                        data={chartData}
-                        options={{
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            },
-                            plugins: {
-                                title: {
-                                    display: !!chartTitle,
-                                    text: chartTitle
-                                },
-                                subtitle: {
-                                    display: !!chartSubTitle,
-                                    text: chartSubTitle
-                                }
-                            }
-                        }}
-                    />
+                    {renderChart()}
                 </div>
             )}
+            <div className="w-full mt-10 h-[400px]">
+        <Spline scene={sceneUrl} />
+            </div>
         </div>
     );
 };
