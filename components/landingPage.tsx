@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-    ClerkProvider,
     SignInButton,
     SignedIn,
     SignUpButton,
@@ -11,6 +10,7 @@ import {
     UserButton,
 } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export function LandingPage() {
     const router = useRouter();
@@ -75,13 +75,13 @@ export function LandingPage() {
                             clicks.
                         </p>
                         <Button
-                            onClick={() => router.push('/generate')}
+                            onClick={() => router.push('/home')}
                             className="mt-8 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md font-medium hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-md text-white"
                         >
                             Get Started
                         </Button>
                     </div>
-                    <img
+                    <Image
                         src="/placeholder.png"
                         width="500"
                         height="400"
@@ -91,7 +91,7 @@ export function LandingPage() {
                 </main>
                 <footer className="py-4 text-center text-gray-500">
                     <p>
-                        <img src="/samespace.jpg" alt="SameSpace Logo" className="h-6 w-auto inline-block align-middle mr-1" />
+                        <Image src="/samespace.jpg" alt="SameSpace Logo" className="h-6 w-auto inline-block align-middle mr-1" />
                         Supported by SameSpace
                     </p>
                 </footer>
