@@ -3,8 +3,9 @@ import React from 'react'
 
 const Generate = () => {
 return (
-    <div>
-    <GeneratePage />
+    <div> 
+        <GeneratePage /> 
+
     </div>
 )
 }

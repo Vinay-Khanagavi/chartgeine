@@ -8,7 +8,7 @@ const DoughnutChart = () => {
     const data = {
         datasets: [
             {
-            label:'Banks' ,
+            label:'Data' ,
             data: [1250,2500,3414],
             backgroundColor: [
                 '#0747b6',
@@ -17,7 +17,7 @@ const DoughnutChart = () => {
             ]
             }
         ],
-        labels:['Bank1','Bank2','Bank3']
+        labels:['Label1','label2','label3']
     }
 return <Doughnut 
     data={data} 
