@@ -71,9 +71,10 @@ export function LandingPage() {
                             AI Powered Data Visualization
                         </h1>
                         <p className="text-lg md:text-xl text-gray-300 mt-6">
-                            VisualizeAI is a cutting-edge web application that empowers users to
+                            ChartGenie is an amazing web application that helps users to
                             create stunning, AI-generated data visualizations in just a few
-                            clicks.
+                            clicks. 
+                            Add your data, and let ChartGenie do the rest.
                         </p>
                         <Button
                             onClick={() => router.push('/generate')}

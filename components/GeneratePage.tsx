@@ -113,7 +113,6 @@ const GeneratePage = () => {
                     {error}
                 </div>
             )}
-
             {chartData && (
                 <div className="w-full max-w-4xl h-[400px] mt-5">
                     <Bar 
@@ -130,8 +129,6 @@ const GeneratePage = () => {
                     />
                 </div>
             )}
-
-            
         </div>
     );
 };

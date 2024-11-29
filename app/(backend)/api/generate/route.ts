@@ -21,7 +21,7 @@ export async function handler(request: NextRequest) {
                 messages: [
                     {
                         role: 'system',
-                        content: 'Generate strict JSON for a bar chart. ONLY return valid JSON in this exact format.'
+                        content: 'Generate strict JSON for a bar or pie chart which is asked. ONLY return valid JSON in this exact format.'
                     },
                     {
                         role: 'user',
