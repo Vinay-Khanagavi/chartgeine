@@ -9,6 +9,7 @@ import {
     LinearScale,
     BarElement,
     ArcElement,
+    LineElement,
     Title,
     Tooltip,
     Legend
@@ -41,6 +42,7 @@ ChartJS.register(
     LinearScale,
     BarElement,
     ArcElement,
+    LineElement,
     Title,
     Tooltip,
     Legend
@@ -63,6 +65,7 @@ interface ChartData {
 const CHART_TYPES = [
     { value: 'bar', label: 'Bar Chart' },
     { value: 'pie', label: 'Pie Chart' },
+    { value: 'line', label: 'Line Chart' }
 ] as const;
 
 type ChartType = typeof CHART_TYPES[number]['value'];
@@ -168,6 +171,8 @@ const GeneratePage = () => {
             case 'bar':
                 return <Bar {...chartProps} />;
             case 'pie':
+                return <Pie {...chartProps} />;
+            case 'line':
                 return <Line {...chartProps} />;
             default:
                 return null;
@@ -320,7 +325,7 @@ const GeneratePage = () => {
                         </SheetFooter>
                     </SheetContent>
                 </Sheet>
-                </div>
+            </div>
             </div>
 
             {error && (
@@ -333,10 +338,11 @@ const GeneratePage = () => {
                     {renderChart()}
                 </div>
             )}
-            <div className="w-full mt-10 h-[400px]">
+        <div className="w-full mt-10 h-[400px]">
         <Spline scene={sceneUrl} />
             </div>
         </div>
+        
     );
 };
 
