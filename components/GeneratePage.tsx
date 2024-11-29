@@ -1,18 +1,41 @@
 "use client"
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { 
-    Chart as ChartJS, 
-    CategoryScale, 
-    LinearScale, 
-    BarElement, 
-    Title, 
-    Tooltip, 
-    Legend 
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
 } from 'chart.js';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Download, Code } from "lucide-react";
+import {
+    Sheet,
+    SheetContent,
+    SheetTrigger,
+    SheetHeader,
+    SheetFooter,
+    SheetTitle,
+    SheetDescription,
+} from "@/components/ui/sheet"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+// Define interfaces for chart data
+interface ChartDataset {
+    label: string;
+    data: number[];
+    backgroundColor?: string | string[];
+}
+
+interface ChartData {
+    labels: string[];
+    datasets: ChartDataset[];
+}
 
 // Register ChartJS components
 ChartJS.register(
@@ -26,12 +49,15 @@ ChartJS.register(
 
 const GeneratePage = () => {
     const [input, setInput] = useState('');
-    const [chartData, setChartData] = useState<any>(null);
+    const [chartData, setChartData] = useState<ChartData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [chartTitle, setChartTitle] = useState("");
+    const [chartSubTitle, setChartSubTitle] = useState("");
+    const chartRef = useRef<any>(null);
+    
 
     const handleGenerate = async () => {
-
         setError(null);
         setChartData(null);
         setIsLoading(true);
@@ -48,16 +74,16 @@ const GeneratePage = () => {
             // Parse the response text first
             const responseText = await response.text();
 
-            let data;
+            let data: ChartData;
             try {
                 data = JSON.parse(responseText);
-            } catch (parseError) {
+            } catch {
                 throw new Error(`Failed to parse response: ${responseText}`);
             }
 
             // Check for error in the parsed response
-            if (data.error) {
-                throw new Error(data.error);
+            if ('error' in data) {
+                throw new Error((data as { error: string }).error);
             }
 
             // Validate chart data structure
@@ -67,20 +93,72 @@ const GeneratePage = () => {
 
             setChartData({
                 ...data,
-                datasets: data.datasets.map((dataset: any) => ({
+                datasets: data.datasets.map((dataset: ChartDataset) => ({
                     ...dataset,
-                    backgroundColor: dataset.backgroundColor || 
+                    backgroundColor: dataset.backgroundColor ||
                         'rgba(75, 192, 192, 0.6)'
                 }))
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Detailed error generating chart:', error);
             setError(
-                error.message || 
-                'An unexpected error occurred while generating the chart'
+                error instanceof Error ? error.message :
+                    'An unexpected error occurred while generating the chart'
             );
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleExportPNG = () => {
+        if (chartRef.current) {
+            const link = document.createElement('a');
+            link.download = `${chartTitle || 'chart'}.png`;
+            link.href = chartRef.current.toBase64Image();
+            link.click();
+
+            alert('Chart exported as PNG');
+        }
+    };
+
+    const handleExportSVG = () => {
+        if (chartRef.current) {
+            // Convert chart to SVG 
+            const svg = chartRef.current.canvas.toDataURL('image/svg+xml');
+            const link = document.createElement('a');
+            link.download = `${chartTitle || 'chart'}.svg`;
+            link.href = svg;
+            link.click();
+
+            alert('Chart exported as SVG');
+        }
+    };
+
+    const handleCopyEmbedCode = () => {
+        if (chartData) {
+            // Generate a basic embeddable code snippet
+            const embedCode = `
+<!-- Embedded Chart -->
+<div style="width: 600px; height: 400px;">
+    <canvas id="embeddedChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('embeddedChart').getContext('2d');
+        new Chart(ctx, ${JSON.stringify({
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            })});
+    </script>
+</div>
+            `.trim();
+
+            navigator.clipboard.writeText(embedCode).then(() => {
+                alert('Embed code copied to clipboard');
+            });
         }
     };
 
@@ -93,8 +171,8 @@ const GeneratePage = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <Button 
-                    onClick={handleGenerate} 
+                <Button
+                    onClick={handleGenerate}
                     disabled={!input || isLoading}
                 >
                     {isLoading ? (
@@ -106,6 +184,60 @@ const GeneratePage = () => {
                         'Generate Chart'
                     )}
                 </Button>
+
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button className="ml-5" variant={"outline"}>Customize</Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-[400px]" side="left">
+                        <SheetHeader>
+                            <SheetTitle>Chart Customization</SheetTitle>
+                            <SheetDescription>
+                                Edit the title, subtitle, and export options.
+                            </SheetDescription>
+                        </SheetHeader>
+                        <div className="flex flex-col w-full gap-2 py-4">
+                            <Label htmlFor="title">Title</Label>
+                            <Input
+                                id="title"
+                                value={chartTitle}
+                                onChange={e => setChartTitle(e.target.value)}
+                            />
+                            <Label htmlFor="subtitle">Subtitle</Label>
+                            <Input
+                                id="subtitle"
+                                value={chartSubTitle}
+                                onChange={e => setChartSubTitle(e.target.value)}
+                            />
+                        </div>
+                        <SheetFooter className="mt-4 flex gap-2">
+                            <Button
+                                variant="outline"
+                                onClick={handleExportPNG}
+                                disabled={!chartData}
+                                className="w-full"
+                            >
+                                <Download className="mr-2 h-4 w-4" /> Export PNG
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={handleExportSVG}
+                                disabled={!chartData}
+                                className="w-full"
+                            >
+                                <Download className="mr-2 h-4 w-4" /> Export SVG
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={handleCopyEmbedCode}
+                                disabled={!chartData}
+                                className="w-full"
+                            >
+                                <Code className="mr-2 h-4 w-4" /> Copy Embed Code
+                            </Button>
+                        </SheetFooter>
+                    </SheetContent>
+                </Sheet>
             </div>
 
             {error && (
@@ -115,8 +247,9 @@ const GeneratePage = () => {
             )}
             {chartData && (
                 <div className="w-full max-w-4xl h-[400px] mt-5">
-                    <Bar 
-                        data={chartData} 
+                    <Bar
+                        ref={chartRef}
+                        data={chartData}
                         options={{
                             responsive: true,
                             maintainAspectRatio: false,
@@ -124,8 +257,18 @@ const GeneratePage = () => {
                                 y: {
                                     beginAtZero: true
                                 }
+                            },
+                            plugins: {
+                                title: {
+                                    display: !!chartTitle,
+                                    text: chartTitle
+                                },
+                                subtitle: {
+                                    display: !!chartSubTitle,
+                                    text: chartSubTitle
+                                }
                             }
-                        }} 
+                        }}
                     />
                 </div>
             )}

@@ -19,6 +19,7 @@ export function LandingPage() {
         <div className="flex flex-col min-h-[100dvh] bg-black text-white">
             <div className="container mx-auto px-4 md:px-6 lg:px-8 py-8">
                 <header className="flex items-center justify-between ">
+                    <link rel="icon" href="/logo.png" sizes="any" />
                     <Link href="/" prefetch={false}>
                         <span className="text-primary-foreground font-bold text-2xl md:text-3xl">
                             ChartGenie
@@ -66,7 +67,7 @@ export function LandingPage() {
                     </div>
                 </header>
                 <main className="flex-1 flex flex-col items-center justify-center text-center ">
-                    <div className="max-w-3xl mx-auto space-y-4 text-center pt-20 md:pt-36 ">
+                    <div className="max-w-3xl mx-auto space-y-4 text-center pt-20 md:pt-30 ">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
                             AI Powered Data Visualization
                         </h1>
