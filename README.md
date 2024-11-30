@@ -1,8 +1,10 @@
-# [ChartGenie](https://github.com/Vinay-Khanagavi/ChartGenie)
+<p align="center">
+  <a href="https://github.com/Vinay-Khanagavi/ChartGenie">
+    <h1>ChartGenie</h1>
+  </a>
+</p>
 
 > ### Demo 
-
-
 https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd
 
 
