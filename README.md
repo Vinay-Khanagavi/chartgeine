@@ -1,6 +1,11 @@
-# [ChartGenie](https://github.com/your-username/ChartGenie)
+# [ChartGenie](https://github.com/Vinay-Khanagavi/ChartGenie)
 
-> ### AI-Powered Data Extraction & Chart Generation Platform
+> ### Demo 
+
+
+https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd
+
+
 
 <p align="center">
   Frontend built with: <br>
