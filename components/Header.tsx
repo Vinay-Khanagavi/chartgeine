@@ -34,18 +34,18 @@ export default function Header() {
                 <div className="flex items-center space-x-4 md:space-x-6">
                     <nav className="flex items-center gap-4 sm:gap-6">
                         <Link
-                            href="#features"
+                            href="https://github.com/Vinay-Khanagavi/chartgeine"
                             className="text-base font-medium hover:underline underline-offset-4"
                             prefetch={false}
                         >
-                            Features
+                            Github
                         </Link>
                         <Link
-                            href="#howitworks"
+                            href="https://vinaykhanagavi.me"
                             className="text-base font-medium hover:underline underline-offset-4"
                             prefetch={false}
                         >
-                            How It Works
+                            Portfolio
                         </Link>
                     </nav>
                     <div className="hidden md:flex items-center gap-4">
