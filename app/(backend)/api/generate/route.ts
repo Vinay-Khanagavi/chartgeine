@@ -28,11 +28,11 @@ export async function POST(request: NextRequest) {
 JSON FORMAT REQUIRED: 
 {
   "type": "${chartType}",
-  "labels": ["Label1", "Label2", "Label3"],
+  "labels": ["Label1", "Label2", "Label3", "Label4", "Label5", "Label6"],
   "datasets": [{
     "label": "Chart Title",
-    "data": [10, 20, 30],
-    "backgroundColor": ["rgba(75,192,192,0.6)", "rgba(255,99,132,0.6)", "rgba(54,162,235,0.6)"]
+    "data": [10, 20, 30, 10o, 20, 30],
+    "backgroundColor": ["rgba(75,192,192,0.6)", "rgba(255,99,132,0.6)", "rgba(54,162,235,0.6) ..."]
   }]
 }`
                 }

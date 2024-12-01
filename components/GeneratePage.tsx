@@ -18,22 +18,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, Code } from "lucide-react";
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
-  SheetDescription,
+    Sheet,
+    SheetContent,
+    SheetTrigger,
+    SheetHeader,
+    SheetFooter,
+    SheetTitle,
+    SheetDescription,
 } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select"
 
 // Register ChartJS components
@@ -78,6 +78,9 @@ const GeneratePage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [chartTitle, setChartTitle] = useState("");
     const [chartSubTitle, setChartSubTitle] = useState("");
+    const [chartLabel, setChartLabel] = useState("");
+    const [chartColor, setChartColor] = useState("");
+
     const chartRef = useRef<any>(null);
     const sceneUrl: SplineProps['scene'] = "https://prod.spline.design/OqMCNfqIwCKfmrzT/scene.splinecode";
 
@@ -93,9 +96,9 @@ const GeneratePage = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     prompt: input,
-                    chartType: chartType 
+                    chartType: chartType
                 })
             });
 
@@ -126,7 +129,7 @@ const GeneratePage = () => {
             console.error('Detailed error generating chart:', error);
             setError(
                 error instanceof Error ? error.message :
-                'An unexpected error occurred while generating the chart'
+                    'An unexpected error occurred while generating the chart'
             );
         } finally {
             setIsLoading(false);
@@ -157,7 +160,7 @@ const GeneratePage = () => {
             data: chartData,
             options: {
                 ...commonOptions,
-                ...(chartType === 'bar' ? { 
+                ...(chartType === 'bar' ? {
                     scales: {
                         y: {
                             beginAtZero: true
@@ -213,13 +216,13 @@ const GeneratePage = () => {
                     <script>
                         const ctx = document.getElementById('embeddedChart').getContext('2d');
                         new Chart(ctx, ${JSON.stringify({
-                                type: 'bar',
-                                data: chartData,
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false
-                                }
-                            })});
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            })});
                     </script>
                 </div>
             `.trim();
@@ -234,16 +237,16 @@ const GeneratePage = () => {
         <div className="flex flex-col items-center min-h-screen p-4 gap-5">
             <div className="w-full max-w-2xl mt-5">
                 <Textarea
-                    className="w-full mb-4"
-                    placeholder="Describe the chart you want to generate (e.g., 'Sales comparison for Q1 2024')"
+                    className="w-full mb-4 border-4 border-light-blue-500"
+                    placeholder="Describe the chart you want to generate (e.g.,' IPL 2020 Stats ' or 'Google Sales comparison for Q1 2024')"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
 
                 <div className="flex items-center space-x-4 mb-4">
                     <Label>Chart Type:</Label>
-                    <Select 
-                        value={chartType} 
+                    <Select
+                        value={chartType}
                         onValueChange={(value: ChartType) => setChartType(value)}
                     >
                         <SelectTrigger className="w-[180px]">
@@ -258,74 +261,86 @@ const GeneratePage = () => {
                         </SelectContent>
                     </Select>
 
-                <Button
-                    onClick={handleGenerate}
-                    disabled={!input || isLoading}
-                >
-                    {isLoading ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Generating...
-                        </>
-                    ) : (
-                        'Generate Chart'
-                    )}
-                </Button>
-                
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button className="ml-5" variant={"outline"}>Customize</Button>
-                    </SheetTrigger>
-                    <SheetContent className="w-[400px]" side="left">
-                        <SheetHeader>
-                            <SheetTitle>Chart Customization</SheetTitle>
-                            <SheetDescription>
-                                Edit the title, subtitle, and export options.
-                            </SheetDescription>
-                        </SheetHeader>
-                        <div className="flex flex-col w-full gap-2 py-4">
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                id="title"
-                                value={chartTitle}
-                                onChange={e => setChartTitle(e.target.value)}
-                            />
-                            <Label htmlFor="subtitle">Subtitle</Label>
-                            <Input
-                                id="subtitle"
-                                value={chartSubTitle}
-                                onChange={e => setChartSubTitle(e.target.value)}
-                            />
-                        </div>
-                        <SheetFooter className="mt-4 flex gap-2">
-                            <Button
-                                variant="outline"
-                                onClick={handleExportPNG}
-                                disabled={!chartData}
-                                className="w-full"
-                            >
-                                <Download className="mr-2 h-4 w-4" /> Export PNG
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={handleExportSVG}
-                                disabled={!chartData}
-                                className="w-full"
-                            >
-                                <Download className="mr-2 h-4 w-4" /> Export SVG
-                            </Button>
-                            <Button
-                                variant="outline"
-                                onClick={handleCopyEmbedCode}
-                                disabled={!chartData}
-                                className="w-full"
-                            >
-                                <Code className="mr-2 h-4 w-4" /> Copy Embed Code
-                            </Button>
-                        </SheetFooter>
-                    </SheetContent>
-                </Sheet>
-            </div>
+                    <Button
+                        onClick={handleGenerate}
+                        disabled={!input || isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Generating...
+                            </>
+                        ) : (
+                            'Generate Chart'
+                        )}
+                    </Button>
+
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button className="ml-5" variant={"outline"}>Customize</Button>
+                        </SheetTrigger>
+                        <SheetContent className="w-[400px]" side="left">
+                            <SheetHeader>
+                                <SheetTitle>Chart Customization</SheetTitle>
+                                <SheetDescription>
+                                    Edit the title, subtitle, and export options.
+                                </SheetDescription>
+                            </SheetHeader>
+                            <div className="flex flex-col w-full gap-2 py-4">
+                                <Label htmlFor="title">Title</Label>
+                                <Input
+                                    id="title"
+                                    value={chartTitle}
+                                    onChange={e => setChartTitle(e.target.value)}
+                                />
+                                <Label htmlFor="subtitle">Subtitle</Label>
+                                <Input
+                                    id="subtitle"
+                                    value={chartSubTitle}
+                                    onChange={e => setChartSubTitle(e.target.value)}
+                                />
+                                <Label htmlFor="Label">Label</Label>
+                                <Input
+                                    id="Label Name"
+                                    value={chartLabel}
+                                    onChange={e => setChartSubTitle(e.target.value)}
+                                />
+                                <Label htmlFor="Color">Color</Label>
+                                <Input
+                                    id="Color"
+                                    value={chartColor}
+                                    onChange={e => setChartSubTitle(e.target.value)}
+                                />
+                            </div>
+                            <SheetFooter className="mt-4 flex gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={handleExportPNG}
+                                    disabled={!chartData}
+                                    className="w-full"
+                                >
+                                    <Download className="mr-2 h-4 w-4" /> Export PNG
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    onClick={handleExportSVG}
+                                    disabled={!chartData}
+                                    className="w-full"
+                                >
+                                    <Download className="mr-2 h-4 w-4" /> Export SVG
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    onClick={handleCopyEmbedCode}
+                                    disabled={!chartData}
+                                    className="w-full"
+                                >
+                                    <Code className="mr-2 h-4 w-4" /> Copy Embed Code
+                                </Button>
+                            </SheetFooter>
+                        </SheetContent>
+                    </Sheet>
+                </div>
             </div>
 
             {error && (
@@ -338,11 +353,11 @@ const GeneratePage = () => {
                     {renderChart()}
                 </div>
             )}
-        <div className="w-full mt-10 h-[400px]">
-        <Spline scene={sceneUrl} />
+            <div className="w-full mt-10 h-[400px]">
+                <Spline scene={sceneUrl} />
             </div>
         </div>
-        
+
     );
 };
 
