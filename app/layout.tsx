@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import Script from "next/script";
 import Header from "@/components/Header";
 
 const geistSans = localFont({
@@ -27,12 +28,29 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-        <Header />
-        {children}
-      </body>
-    </html>
-  </ClerkProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          {/* Google Analytics Script */}
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-KTM0S61T3C"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-KTM0S61T3C', {
+                page_path: window.location.pathname,
+              });
+            `}
+          </Script>
+
+          {/* App Header */}
+          <Header />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
