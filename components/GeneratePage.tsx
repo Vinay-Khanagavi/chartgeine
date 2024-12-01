@@ -8,6 +8,7 @@ import {
     CategoryScale,
     LinearScale,
     BarElement,
+    PointElement,
     ArcElement,
     LineElement,
     Title,
@@ -42,6 +43,7 @@ ChartJS.register(
     LinearScale,
     BarElement,
     ArcElement,
+    PointElement,
     LineElement,
     Title,
     Tooltip,
@@ -121,10 +123,8 @@ const GeneratePage = () => {
                 throw new Error('Invalid chart data received');
             }
 
-            setChartData({
-                ...data,
-                type: chartType
-            });
+            setChartData(data);
+
         } catch (error: unknown) {
             console.error('Detailed error generating chart:', error);
             setError(
@@ -139,7 +139,7 @@ const GeneratePage = () => {
     // Render the appropriate chart type
     const renderChart = () => {
         if (!chartData) return null;
-
+    
         const commonOptions = {
             responsive: true,
             maintainAspectRatio: false,
@@ -154,10 +154,13 @@ const GeneratePage = () => {
                 }
             }
         };
-
+    
         const chartProps = {
             ref: chartRef,
-            data: chartData,
+            data: {
+                labels: chartData.labels,
+                datasets: chartData.datasets
+            },
             options: {
                 ...commonOptions,
                 ...(chartType === 'bar' ? {
@@ -169,7 +172,7 @@ const GeneratePage = () => {
                 } : {})
             }
         };
-
+    
         switch (chartType) {
             case 'bar':
                 return <Bar {...chartProps} />;
@@ -238,7 +241,7 @@ const GeneratePage = () => {
             <div className="w-full max-w-2xl mt-5">
                 <Textarea
                     className="w-full mb-4 border-4 border-light-blue-500"
-                    placeholder="Describe the chart you want to generate (e.g.,' IPL 2020 Stats ' or 'Google Sales comparison for Q1 2024')"
+                    placeholder="Describe the chart you want to generate (e.g.,' FIFA Stats ' or 'Google Sales comparison for Q1 2024')"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
