@@ -82,7 +82,7 @@ const GeneratePage = () => {
     const [chartColor, setChartColor] = useState("");
 
     const chartRef = useRef<any>(null);
-    const sceneUrl: SplineProps['scene'] = "https://prod.spline.design/OqMCNfqIwCKfmrzT/scene.splinecode";
+    const sceneUrl: SplineProps['scene'] = "https://prod.spline.design/SbVft5e6GVtV5-P7/scene.splinecode";
 
 
     const handleGenerate = async () => {
