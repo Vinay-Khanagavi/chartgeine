@@ -1,13 +1,15 @@
 <p align="center">
   <a href="https://github.com/Vinay-Khanagavi/ChartGenie">
-    <h1>ChartGenie</h1>
+    <img src="https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd" alt="ChartGenie Demo" width="600">
   </a>
 </p>
 
-> ### Demo 
-https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd
+<h1 align="center">ChartGenie</h1>
 
+### Demo  
+[Click here to view the demo](https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd)
 
+> **Note**: It's powered by **llama3** – 8 billion parameters.
 
 <p align="center">
   Frontend built with: <br>
