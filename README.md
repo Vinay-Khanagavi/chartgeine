@@ -1,9 +1,3 @@
-<p align="center">
-  <a href="https://github.com/Vinay-Khanagavi/ChartGenie">
-    <img src="https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd" alt="ChartGenie Demo" width="600">
-  </a>
-</p>
-
 <h1 align="center">ChartGenie</h1>
 
 ### Demo  
