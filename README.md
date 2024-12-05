@@ -44,7 +44,7 @@ ChartGenie is an AI-powered platform that extracts data from user inputs (e.g., 
 
 ---
 
-## How We Built It
+## How I Built It
 ChartGenie integrates cutting-edge technologies into a cohesive system:
 
 - **Frontend**: Built using Next.js, ShadCN, and Tailwind CSS for responsive and accessible design.
@@ -55,14 +55,14 @@ ChartGenie integrates cutting-edge technologies into a cohesive system:
 
 ---
 
-## Challenges We Ran Into
+## Challenges I Ran Into
 - **Embedding Management**: Ensuring the embeddings stored in Pinecone aligned with user-specific data queries.
 - **Chart Customization**: Achieving flexibility in Chart.js configurations for diverse user needs.
 - **Authentication Integration**: Seamlessly integrating Clerk while maintaining a smooth user experience.
 
 ---
 
-## Accomplishments That We're Proud Of
+## Accomplishments That I am Proud Of
 - Successfully integrated AI-powered data extraction and real-time chart generation.
 - Developed a responsive and visually appealing UI using ShadCN and Tailwind CSS.
 - Implemented secure user authentication with Clerk.
@@ -70,7 +70,7 @@ ChartGenie integrates cutting-edge technologies into a cohesive system:
 
 ---
 
-## What We Learned
+## What I Learned
 - Leveraging vector databases like Pinecone to optimize AI-driven data retrieval.
 - Best practices for integrating third-party authentication (Clerk) into a full-stack application.
 - Advanced Chart.js configurations for dynamic visualizations.
