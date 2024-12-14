@@ -1,7 +1,7 @@
 <h1 align="center">ChartGenie</h1>
 
 ### Demo  
-[Click here to view the demo](https://github.com/user-attachments/assets/8fcaa039-c2db-4f93-b680-0216cf2993cd)
+https://github.com/user-attachments/assets/679e2682-db62-4b0a-b1a7-982dded34e64
 
 > **Note**: It's powered by **llama3** – 8 billion parameters.
 
