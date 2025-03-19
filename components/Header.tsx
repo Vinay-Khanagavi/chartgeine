@@ -40,13 +40,13 @@ export default function Header() {
                         >
                             Github
                         </Link>
-                        <Link
+{/*                         <Link
                             href="https://vinaykhanagavi.me"
                             className="text-base font-medium hover:underline underline-offset-4"
                             prefetch={false}
                         >
                             Portfolio
-                        </Link>
+                        </Link> */}
                     </nav>
                     <div className="hidden md:flex items-center gap-4">
                         <SignedOut>
